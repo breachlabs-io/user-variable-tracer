@@ -93,3 +93,18 @@ class Instruction:
 
     def add_xref(self, xref):
         self._xrefs.append(xref)
+
+
+class InstructionAddressBinarySearch:
+    @classmethod
+    def search(cls, instructions, start, end, address):
+        if start >= end:
+            middle = start + (end - 1) / 2
+            if instructions[middle].address == address:
+                return instructions[middle]
+            elif instructions[middle].address > address:
+                return cls.search(instructions, start, middle - 1, address)
+            else:
+                return cls.search(instructions, middle + 1, end, address)
+        else:
+            return None

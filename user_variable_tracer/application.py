@@ -1,4 +1,5 @@
 from .analyzers import run_analyzers
+from .instruction import InstructionAddressBinarySearch
 from .mixins import *
 
 
@@ -44,9 +45,11 @@ class Application(CsMixin, ElfMixin):
 
     def get_instruction_for_address(self, addr):
         for section in self._sections:
-            for instruction in section.instructions:
-                if instruction.address == addr:
-                    return instruction
+            address_range = section.instruction_address_range
+            if address_range and address_range.in_range(addr):
+                return InstructionAddressBinarySearch.search(
+                    section.instructions, 0, len(section.instructions) - 1, addr
+                )
         return None
 
     def get_section_for_name(self, name):

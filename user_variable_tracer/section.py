@@ -1,5 +1,7 @@
 from elftools.elf.relocation import RelocationSection
 
+from .utils import AddressRange
+
 
 class Section:
     def __init__(self, cs_section):
@@ -8,6 +10,7 @@ class Section:
         self._link = cs_section["sh_link"]
         self._data = cs_section.data()
         self._instructions = []
+        self._instruction_address_range = None
         self._cs_section = cs_section
 
     def __str__(self):
@@ -39,6 +42,16 @@ class Section:
     @instructions.setter
     def instructions(self, values):
         self._instructions = values
+        instructions_len = len(self._instructions)
+        if instructions_len > 0:
+            self._instruction_address_range = AddressRange(
+                self._instructions[0].address,
+                self._instructions[instructions_len - 1].address,
+            )
+
+    @property
+    def instruction_address_range(self):
+        return self._instruction_address_range
 
     @property
     def is_relocation_section(self):
