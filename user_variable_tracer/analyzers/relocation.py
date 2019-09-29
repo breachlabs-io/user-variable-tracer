@@ -17,9 +17,7 @@ class RelocationAnalyzer(BaseAnalyzer):
                 if relocation:
                     instruction.relocation = relocation
                 else:
-                    offset_instruction = self.application\
-                        .get_instruction_for_address(
-                            instruction.get_instruction_offset())
+                    offset_instruction = self.application.get_instruction_for_address(instruction.get_instruction_offset())
                     if (offset_instruction and
                             offset_instruction.section.name == '.plt'):
                         instruction.relocation = offset_instruction.relocation

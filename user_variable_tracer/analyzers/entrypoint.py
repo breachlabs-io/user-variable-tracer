@@ -18,6 +18,6 @@ class EntrypointAnalyzer(BaseAnalyzer):
 
                 prev_instruction = text_section.instructions[i-1]
                 if prev_instruction.has_instruction_offset:
-                    self.application.entrypoint = prev_instruction\
-                        .get_instruction_offset()
+                    self.application.entrypoint = (prev_instruction
+                                                   .get_instruction_offset())
                 break

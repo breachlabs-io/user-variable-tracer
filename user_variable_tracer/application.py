@@ -12,17 +12,14 @@ class Application(CsMixin, ElfMixin):
         self._set_section_instructions()
         self._entrypoint = None
 
-        # run_analyzers(self)
+        run_analyzers(self)
 
     def __del__(self):
         if self._file:
             self._file.close()
 
     def __str__(self):
-        ret = ""
-        for section in self._sections:
-            ret += f"{section}\n"
-        return ret
+        return "\n".join([str(section) for section in self._sections])
 
     def _set_section_instructions(self):
         for section in self._sections:

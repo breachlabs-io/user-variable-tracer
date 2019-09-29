@@ -12,10 +12,10 @@ class CsMixin:
     @classmethod
     def get_instructions(cls, arch, section):
         cs = cls._get_cs(arch)
-        instructions = []
-        for instruction in cs.disasm(section.data, section.address):
-            instructions.append(Instruction(instruction, section))
-        return instructions
+        return [
+            Instruction(instruction, section)
+            for instruction in cs.disasm(section.data, section.address)
+        ]
 
     @staticmethod
     def _get_cs(arch):
@@ -35,10 +35,10 @@ class ElfMixin:
 
     @staticmethod
     def get_sections(elf_file):
-        sections = []
-        for section in elf_file.iter_sections():
-            sections.append(Section(section))
-        return sections
+        return [
+            Section(section)
+            for section in elf_file.iter_sections()
+        ]
 
     @staticmethod
     def get_relocations(elf_file, sections):
@@ -46,11 +46,12 @@ class ElfMixin:
         for section in sections:
             if section.is_relocation_section:
                 symbol_table = elf_file.get_section(section.link)
-                for relocation in section.iter_cs_relocations():
-                    symbol = symbol_table.get_symbol(relocation['r_info_sym'])
-                    relocations.append(Relocation(
+                relocations.extend([
+                    Relocation(
                         relocation,
-                        symbol,
+                        symbol_table.get_symbol(relocation['r_info_sym']),
                         section
-                    ))
+                    )
+                    for relocation in section.iter_cs_relocations()
+                ])
         return relocations
