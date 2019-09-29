@@ -3,9 +3,8 @@ from .mixins import *
 
 
 class Application(CsMixin, ElfMixin):
-
     def __init__(self, application_file):
-        self._file = open(application_file, 'rb')
+        self._file = open(application_file, "rb")
         self._elf_file = self.get_elf_file(self._file)
         self._sections = self.get_sections(self._elf_file)
         self._relocations = self.get_relocations(self._elf_file, self._sections)
@@ -24,8 +23,7 @@ class Application(CsMixin, ElfMixin):
     def _set_section_instructions(self):
         for section in self._sections:
             section.instructions = self.get_instructions(
-                self._elf_file.get_machine_arch(),
-                section,
+                self._elf_file.get_machine_arch(), section
             )
 
     @property

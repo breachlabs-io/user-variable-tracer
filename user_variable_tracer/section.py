@@ -2,11 +2,10 @@ from elftools.elf.relocation import RelocationSection
 
 
 class Section:
-
     def __init__(self, cs_section):
         self._name = cs_section.name
-        self._address = cs_section['sh_addr']
-        self._link = cs_section['sh_link']
+        self._address = cs_section["sh_addr"]
+        self._link = cs_section["sh_link"]
         self._data = cs_section.data()
         self._instructions = []
         self._cs_section = cs_section

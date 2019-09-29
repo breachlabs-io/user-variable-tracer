@@ -8,7 +8,6 @@ from .relocation import Relocation
 
 
 class CsMixin:
-
     @classmethod
     def get_instructions(cls, arch, section):
         cs = cls._get_cs(arch)
@@ -20,7 +19,7 @@ class CsMixin:
     @staticmethod
     def _get_cs(arch):
         cs = None
-        if arch == 'x64':
+        if arch == "x64":
             cs = Cs(CS_ARCH_X86, CS_MODE_64)
         if cs:
             cs.detail = True
@@ -28,17 +27,13 @@ class CsMixin:
 
 
 class ElfMixin:
-
     @staticmethod
     def get_elf_file(open_file):
         return ELFFile(open_file)
 
     @staticmethod
     def get_sections(elf_file):
-        return [
-            Section(section)
-            for section in elf_file.iter_sections()
-        ]
+        return [Section(section) for section in elf_file.iter_sections()]
 
     @staticmethod
     def get_relocations(elf_file, sections):
@@ -46,12 +41,14 @@ class ElfMixin:
         for section in sections:
             if section.is_relocation_section:
                 symbol_table = elf_file.get_section(section.link)
-                relocations.extend([
-                    Relocation(
-                        relocation,
-                        symbol_table.get_symbol(relocation['r_info_sym']),
-                        section
-                    )
-                    for relocation in section.iter_cs_relocations()
-                ])
+                relocations.extend(
+                    [
+                        Relocation(
+                            relocation,
+                            symbol_table.get_symbol(relocation["r_info_sym"]),
+                            section,
+                        )
+                        for relocation in section.iter_cs_relocations()
+                    ]
+                )
         return relocations

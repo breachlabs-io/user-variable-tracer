@@ -2,7 +2,6 @@ from .operand import Operand
 
 
 class Instruction:
-
     def __init__(self, cs_instruction, section):
         self._address = cs_instruction.address
         self._size = cs_instruction.size
@@ -19,7 +18,7 @@ class Instruction:
     def __str__(self):
         ret = f"0x{self._address:x}\t{self._mnemonic}\t"
         if self.has_relocation and self._relocation.name:
-            if 'call' in self._mnemonic:
+            if "call" in self._mnemonic:
                 ret += f"{self._relocation.name}"
             else:
                 ret += f"{self._op_str}; {self._relocation.name}"
@@ -54,19 +53,25 @@ class Instruction:
     @property
     def has_instruction_offset(self):
         for operand in self._operands:
-            if (operand.has_base_instruction_offset or
-                    operand.has_immediate_instruction_offset):
+            if (
+                operand.has_base_instruction_offset
+                or operand.has_immediate_instruction_offset
+            ):
                 return True
         return False
 
     def get_instruction_offset(self):
         for operand in self._operands:
             if operand.has_base_instruction_offset:
-                return (self._address +
-                        self._size +
-                        operand.get_base_instruction_offset())
-            elif (operand.has_immediate_instruction_offset and
-                  'call' in self._mnemonic):
+                return (
+                    self._address
+                    + self._size
+                    + operand.get_base_instruction_offset()
+                )
+            elif (
+                operand.has_immediate_instruction_offset
+                and "call" in self._mnemonic
+            ):
                 return operand.get_immediate_instruction_offset()
         return 0
 

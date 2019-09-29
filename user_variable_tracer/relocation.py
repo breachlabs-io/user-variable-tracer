@@ -1,8 +1,7 @@
 class Relocation:
-
     def __init__(self, cs_relocation, cs_symbol, section):
         self._name = cs_symbol.name
-        self._address = cs_relocation['r_offset']
+        self._address = cs_relocation["r_offset"]
         self._section = section
 
     def __str__(self):
@@ -22,4 +21,4 @@ class Relocation:
 
     @property
     def is_libc_start_main(self):
-        return self._name == '__libc_start_main'
+        return self._name == "__libc_start_main"

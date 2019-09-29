@@ -8,7 +8,6 @@ class OperandType(Enum):
 
 
 class Operand:
-
     def __init__(self, cs_operand, reg_name_fn):
         self._type = OperandType(cs_operand.type)
         self._cs_operand = cs_operand
@@ -39,9 +38,11 @@ class Operand:
     def has_base_instruction_offset(self):
         if not self._type == OperandType.Memory:
             return False
-        return (self.register == 'rip' or
-                self.register == 'eip' or
-                self.register == 'ip')
+        return (
+            self.register == "rip"
+            or self.register == "eip"
+            or self.register == "ip"
+        )
 
     def get_base_instruction_offset(self):
         if not self.has_base_instruction_offset:
