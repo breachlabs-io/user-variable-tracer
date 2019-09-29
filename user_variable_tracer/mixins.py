@@ -1,3 +1,5 @@
+import sys
+
 from capstone import *
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
@@ -19,10 +21,16 @@ class CsMixin:
     @staticmethod
     def _get_cs(arch):
         cs = None
+
         if arch == "x64":
             cs = Cs(CS_ARCH_X86, CS_MODE_64)
+        else:
+            print(f"No decompiler available for {arch}")
+            sys.exit(1)
+
         if cs:
             cs.detail = True
+
         return cs
 
 
